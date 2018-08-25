@@ -2,33 +2,33 @@
 
 $(document).ready(function () {
     //create a list of characters
-    
+
 
     var player;
     var enemy;
     var characters;
 
-    function Message(){
+    function Message() {
         var message = "";
-        if(player === ""){
+        if (player === "") {
             message = "Choose your Character";
         }
-        else if (characters.length === 0 && enemy.health <= 0){
+        else if (characters.length === 0 && enemy.health <= 0) {
             message = "You WIN!";
         }
-        else if(enemy === "" || enemy.health === 0){
+        else if (enemy === "" || enemy.health === 0) {
             message = "Choose your Enemy";
         }
-        else if(player.health === 0){
+        else if (player.health === 0) {
             message = "You Lose";
         }
-        else{
+        else {
             message = "Lets Play";
         }
         $("#message").text(message);
     }
 
-    function CopyCol(col){
+    function CopyCol(col) {
         var items = [];
         col.forEach(item => {
             items.push(item);
@@ -41,12 +41,12 @@ $(document).ready(function () {
         player = "";
         enemy = "";
         LoadCharacters();
-        LoadPlayer();
-        LoadEnemy();
+        LoadCharacter("#player", player);
+        LoadCharacter("#enemy", enemy);
         Message();
     }
 
-    function LoadCharacters(){
+    function LoadCharacters() {
         $("#choices").empty();
         characters.forEach(character => {
             BuildCard(character, "choices");
@@ -82,80 +82,82 @@ $(document).ready(function () {
     }
 
     $(document).on("click", ".select-card", function () {
-        console.log("clicked " + $(this).attr("value"));
+        if(player !== "" && player.health === 0){return;}
 
         characters.forEach(item => {
             if (item.name === $(this).attr("value")) {
                 if (typeof (player) === "string" || player.health === 0) {
-                    player = item;
+                    player = jQuery.extend(true, {}, item);
                     RemoveCharacter(player.name);
-                    LoadPlayer();
+                    LoadCharacter("#player", player);
                 }
-                else if (typeof (enemy) === "string" || enemy.health ===0) {
-                    enemy = item;
+                else if (typeof (enemy) === "string" || enemy.health === 0) {
+                    enemy = jQuery.extend(true, {}, item);
                     RemoveCharacter(enemy.name);
-                    LoadEnemy();
+                    LoadCharacter("#enemy", enemy);
                 }
             }
         });
+
+        ResetAttack();
         LoadCharacters();
+        if (enemy !== "" && player !== "") { }
         Message();
     });
 
-    function LoadPlayer(){
-        if(player != ""){
-        $("#player-img").attr("src", "./assets/images/" + player.name + ".jpg")
-        $("#player-health").text(player.health + " / " + player.maxHealth);
-        $("#player-attack").text(player.attackMin);
-        $("#player-health-bar").width(((player.health/player.maxHealth)*100) + "%");
-        $("#player-attack-range").text(player.attackRange);
-        $("#player").removeClass("hidden");}
-        else {
-            $("#player").addClass("hidden");
-        }
-    };
+    function LoadCharacter(characterDiv, chara) {
+        if (chara != "") {
+            $(characterDiv).find(".char-img").attr("src", "./assets/images/" + chara.name + ".jpg");
+            $(characterDiv).find(".char-health").text(chara.health + " / " + chara.maxHealth);
+            $(characterDiv).find(".char-attack-base").text(chara.attackMin);
+            $(characterDiv).find(".health-bar").css("width", ((chara.health / chara.maxHealth) * 100) + "%");
+            $(characterDiv).find(".char-attack-range").text(chara.attackRange);
 
-    function LoadEnemy(){
-        if(enemy != ""){
-        $("#enemy-img").attr("src", "./assets/images/" + enemy.name + ".jpg")
-        $("#enemy-health").text(enemy.health + " / " + enemy.maxHealth);
-        $("#enemy-attack").text(enemy.attackMin);
-        $("#enemy-health-bar").width(((enemy.health/enemy.maxHealth)*100) + "%");
-        $("#enemy-attack-range").text(enemy.attackRange);
-        $("#enemy").removeClass("hidden");
-        $("#attack").removeClass("hidden");
+            $(characterDiv).removeClass("hidden");
         }
         else {
-            $("#enemy").addClass("hidden");
+            $(characterDiv).addClass("hidden");
         }
-    };
-
-    function attack(character, attack){
-        character.health -= attack;
     }
 
-    $("#attack").click(function (){
-        if(enemy.health <= 0 || player.health <= 0){return;}
-        console.log(player.attackMin + " " + Math.floor(Math.random() * player.attackRange));
-        enemy.health -= (player.attackMin + Math.floor(Math.random() * player.attackRange));
-        player.attackMin += Math.floor(Math.random() * 3) + 1;
-        if(enemy.health <= 0){
-            enemy.health = 0;
+    function attack(defender, attacker) {
+        defender.health -= (attacker.attackMin + Math.floor(Math.random() * attacker.attackRange));
+
+    }
+
+    function ResetAttack() {
+        console.log(enemy);
+        console.log(player);
+        if (enemy === "" || player === "" || enemy.health === 0 || player.health === 0) {
             $("#attack").addClass("hidden");
         }
-        else{ //enemy can attack
+        else {
+            $("#attack").removeClass("hidden");
+        }
+        Message();
+    }
+
+    $("#attack").click(function () {
+        if (enemy.health <= 0 || player.health <= 0) { return; }
+        
+        enemy.health -= (player.attackMin + Math.floor(Math.random() * player.attackRange));
+        player.attackMin += Math.floor(Math.random() * 3) + 1;
+        if (enemy.health <= 0) {
+            enemy.health = 0;
+        }
+        else { //enemy can attack
             player.health -= (enemy.attackMin + Math.floor(Math.random() * enemy.attackRange));
-            if(player.health<0){
+            if (player.health < 0) {
                 player.health = 0;
             }
         }
-        LoadEnemy();
-        LoadPlayer();
-        Message();
-        
+        LoadCharacter("#enemy", enemy);
+        LoadCharacter("#player", player);
+        ResetAttack();
+
     });
 
-    $("#reset").click(function(){
+    $("#reset").click(function () {
         ResetGame();
     })
 
