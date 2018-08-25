@@ -1,0 +1,75 @@
+body{
+    /* background-image: url("../images/background.jpg");
+    background-color: black;
+    background-repeat: no-repeat;
+    background-size: 100%;
+    background-position-y: center; */
+}
+
+.container{
+    margin: 20px 50px;
+}
+
+.content{
+    overflow: auto;
+}
+
+.row{
+    overflow: auto;
+    clear: both;
+    margin: 20px 0px;
+
+}
+
+.title-lg{
+    font-size: 40px;
+    font-style: bold;
+}
+
+div[class*="col-"]{
+    float: left;
+    margin: 5px;
+}
+.col-sm{
+
+}
+.col-lg{
+    width: 45%;
+}
+
+.hidden{
+    visibility: hidden;
+}
+
+.stats{
+    text-align: center;
+}
+
+.img{
+    width: 150px;
+    height: 150px;
+    margin: 2px;
+}
+
+.health-bar-full{
+    margin:0px;
+    border-style: solid;
+    border-width: 1px;
+    border-color: darkgray;
+    background-color: lightgray;
+    height: 5px;
+}
+
+.health-bar{
+    width: 100%;
+    background-color: red;
+    height: 100%;
+}
+
+.area-background{
+    background-image: url("../images/area-background.jpg");
+    background-repeat: no-repeat;
+    background-size: 100%;
+    background-color: brown;
+}
+
