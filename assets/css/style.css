@@ -90,3 +90,9 @@ div[class*="col-"]{
 .no-m{
     margin: 0px;
 }
+
+.char-details{
+    border-style: solid;
+    border-color: darkgray;
+    border-width: 1px;
+}

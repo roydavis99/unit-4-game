@@ -7,6 +7,13 @@ $(document).ready(function () {
     var player;
     var enemy;
     var characters;
+    var state;
+    /*
+        selecting = 0,
+        playing = 1,
+        win = 2,
+        loss = 3
+    */
 
     function Message() {
         var message = "";
@@ -44,6 +51,7 @@ $(document).ready(function () {
         LoadCharacter("#player", player);
         LoadCharacter("#enemy", enemy);
         Message();
+        state = 0;
     }
 
     function LoadCharacters() {
@@ -82,22 +90,24 @@ $(document).ready(function () {
     }
 
     $(document).on("click", ".select-card", function () {
-        if(player !== "" && player.health === 0){return;}
+        console.log(state);
+        if (state !== 0 && state !== 2) { return; }
 
         characters.forEach(item => {
             if (item.name === $(this).attr("value")) {
                 if (typeof (player) === "string" || player.health === 0) {
                     player = jQuery.extend(true, {}, item);
                     RemoveCharacter(player.name);
-                    LoadCharacter("#player", player);
                 }
                 else if (typeof (enemy) === "string" || enemy.health === 0) {
                     enemy = jQuery.extend(true, {}, item);
                     RemoveCharacter(enemy.name);
-                    LoadCharacter("#enemy", enemy);
+                    state = 1;
                 }
             }
         });
+        LoadCharacter("#player", player);
+        LoadCharacter("#enemy", enemy);
 
         ResetAttack();
         LoadCharacters();
@@ -108,6 +118,31 @@ $(document).ready(function () {
     function LoadCharacter(characterDiv, chara) {
         if (chara != "") {
             $(characterDiv).find(".char-img").attr("src", "./assets/images/" + chara.name + ".jpg");
+
+            switch (state) {
+                case 2: //win
+                case 3: //loss
+                    if (chara.health > 0) {
+                        $(characterDiv).find(".saying").text(chara.response[1]);
+                    } else {
+                        $(characterDiv).find(".saying").text(chara.response[2]);
+                    }
+                    break;
+                default:
+                case 1: //playing
+                    $(characterDiv).find(".saying").text(chara.response[0]);
+                    break;
+
+            }
+
+            /* if(chara.health > 0){
+            $(characterDiv).find(".saying").text(chara.response[0]);
+            }
+            else if(chara.health <= 0){
+                $(characterDiv).find(".saying").text(chara.response[2]);
+            } else if(characters.length === 0){
+                $(characterDiv).find(".saying").text(chara.response[1]);
+            } */
             $(characterDiv).find(".char-health").text(chara.health + " / " + chara.maxHealth);
             $(characterDiv).find(".char-attack-base").text(chara.attackMin);
             $(characterDiv).find(".health-bar").css("width", ((chara.health / chara.maxHealth) * 100) + "%");
@@ -128,7 +163,7 @@ $(document).ready(function () {
     function ResetAttack() {
         console.log(enemy);
         console.log(player);
-        if (enemy === "" || player === "" || enemy.health === 0 || player.health === 0) {
+        if (state !== 1) {//enemy === "" || player === "" || enemy.health === 0 || player.health === 0) {
             $("#attack").addClass("hidden");
         }
         else {
@@ -139,16 +174,18 @@ $(document).ready(function () {
 
     $("#attack").click(function () {
         if (enemy.health <= 0 || player.health <= 0) { return; }
-        
+
         enemy.health -= (player.attackMin + Math.floor(Math.random() * player.attackRange));
         player.attackMin += Math.floor(Math.random() * 3) + 1;
         if (enemy.health <= 0) {
             enemy.health = 0;
+            state = 2;
         }
         else { //enemy can attack
             player.health -= (enemy.attackMin + Math.floor(Math.random() * enemy.attackRange));
             if (player.health < 0) {
                 player.health = 0;
+                state = 3;
             }
         }
         LoadCharacter("#enemy", enemy);
