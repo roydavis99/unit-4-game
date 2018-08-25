@@ -1,12 +1,8 @@
+
+
 $(document).ready(function () {
     //create a list of characters
-    var gameCharacters = [
-        { name: "Luke Skywalker", health: 100, maxHealth: 100, attackMin: 5, attackRange: 4, bonus: false },
-        { name: "Obi-one", health: 140, maxHealth: 140, attackMin: 10, attackRange: 4, bonus: false },
-        { name: "Darth Vader", health: 160, maxHealth: 160, attackMin: 20, attackRange: 4, bonus: false },
-        { name: "Darth Maul", health: 180, maxHealth: 180, attackMin: 30, attackRange: 4, bonus: false },
-        { name: "Darth Jar-Jar", health: 200, maxHealth: 200, attackMin: 40, attackRange: 4, bonus: true }
-    ];
+    
 
     var player;
     var enemy;
@@ -17,26 +13,37 @@ $(document).ready(function () {
         if(player === ""){
             message = "Choose your Character";
         }
-        else if(enemy === "" || enemy.health === 0){
-            message = "Choose your Enemy";
-        }
         else if (characters.length === 0 && enemy.health <= 0){
             message = "You WIN!";
+        }
+        else if(enemy === "" || enemy.health === 0){
+            message = "Choose your Enemy";
         }
         else if(player.health === 0){
             message = "You Lose";
         }
+        else{
+            message = "Lets Play";
+        }
         $("#message").text(message);
     }
 
+    function CopyCol(col){
+        var items = [];
+        col.forEach(item => {
+            items.push(item);
+        });
+        return items;
+    }
+
     function ResetGame() {
-        characters = gameCharacters;
+        characters = gameCharacters.slice(0);
         player = "";
         enemy = "";
         LoadCharacters();
         LoadPlayer();
         LoadEnemy();
-        //Message();
+        Message();
     }
 
     function LoadCharacters(){
@@ -92,7 +99,7 @@ $(document).ready(function () {
             }
         });
         LoadCharacters();
-        //Message();
+        Message();
     });
 
     function LoadPlayer(){
@@ -138,10 +145,13 @@ $(document).ready(function () {
         }
         else{ //enemy can attack
             player.health -= (enemy.attackMin + Math.floor(Math.random() * enemy.attackRange));
+            if(player.health<0){
+                player.health = 0;
+            }
         }
         LoadEnemy();
         LoadPlayer();
-        //Message();
+        Message();
         
     });
 

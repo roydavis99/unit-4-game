@@ -7,19 +7,21 @@
     <link rel="stylesheet" href="./assets/css/style.css">
     <!-- Added link to the jQuery Library -->
     <script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.2.1/jquery.min.js"></script>
+    <script src="./assets/javascript/characters.js"></script>
+    <script src="./assets/javascript/game.js"></script>
 
 
 </head>
 
 <body>
-    <header class="container">
+    <header class="container center">
         <h1 class="title-lg center">Start Wars</h1>
         <h3 id="message" class="title-md">Choose your Character</h3>
     </header>
 
     <div class="container">
         <button id="reset">Reset</button>
-        <div id="choices" class="row">
+        <div id="choices" class="row character-select">
         </div>
 
         <button id="attack" class="hidden">Attack</button>
@@ -29,9 +31,9 @@
                     Player
                 </h3>
                 <div>
-                    <img id="player-img" src="#">
+                    <img id="player-img" class="char-img" src="#">
                     <div>
-                        <div class="row">
+                        <div class="row no-m">
                             <div class="col-lg">
                                 <h2>Health: <span id="player-health"></span></h2>
                             </div>
@@ -39,7 +41,7 @@
                                 <h2>Attack Base: <span  id="player-attack"></span></h2>
                             </div>
                         </div>
-                        <div class="row">
+                        <div class="row no-m">
                             <div class="col-lg">
                                 <div class="health-bar-full">
                                     <div id="player-health-bar" class="health-bar">
@@ -60,9 +62,9 @@
                     Enemy
                 </h3>
                 <div>
-                    <img id="enemy-img" src="#">
+                    <img id="enemy-img" class="char-img" src="#">
                     <div>
-                        <div class="row">
+                        <div class="row no-m">
                             <div class="col-lg">
                                 <h2>Health: <span id="enemy-health"></span></h2>
                             </div>
@@ -70,7 +72,7 @@
                                 <h2>Attack Base: <span id="enemy-attack"></span></h2>
                             </div>
                         </div>
-                        <div class="row">
+                        <div class="row no-m">
                             <div class="col-lg">
                                 <div class="health-bar-full">
                                     <div id="enemy-health-bar" class="health-bar">
@@ -89,7 +91,6 @@
 
     </div>
 
-    <script src="./assets/javascript/game.js"></script>
 </body>
 
 </html>

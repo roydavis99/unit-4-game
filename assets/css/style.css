@@ -1,9 +1,10 @@
 body{
-    /* background-image: url("../images/background.jpg");
+    background-image: url("../images/background2.jpg");
     background-color: black;
     background-repeat: no-repeat;
     background-size: 100%;
-    background-position-y: center; */
+    background-position-y: center; 
+    color: #f7ed0a;
 }
 
 .container{
@@ -21,9 +22,24 @@ body{
 
 }
 
+.center{
+    text-align: center;
+}
+
 .title-lg{
     font-size: 40px;
     font-style: bold;
+    margin: 10px 0px;
+}
+
+h3{
+    font-size: 20px;
+    font-style: bold;
+    margin: 5px 0px;
+}
+
+.character-select{
+    min-height: 200px;
 }
 
 div[class*="col-"]{
@@ -58,6 +74,7 @@ div[class*="col-"]{
     border-color: darkgray;
     background-color: lightgray;
     height: 5px;
+    width: 80%;
 }
 
 .health-bar{
@@ -67,9 +84,17 @@ div[class*="col-"]{
 }
 
 .area-background{
-    background-image: url("../images/area-background.jpg");
+    /* background-image: url("../images/area-background.jpg");
     background-repeat: no-repeat;
-    background-size: 100%;
-    background-color: brown;
+    background-size: 100%; */
+    /*background-color: brown;*/
 }
 
+.char-img{
+    width: 200px;
+    height: 200px;
+}
+
+.no-m{
+    margin: 0px;
+}
